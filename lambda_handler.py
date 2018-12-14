@@ -46,12 +46,20 @@ def lambda_handler(event, context):
         items = log2['requestParameters']['ipPermissions']['items']
         temp_message = []
         for i in items:
-            cidrIp = i['ipRanges']['items'][0]['cidrIp']
             Port = str(i['fromPort'])
-            if 'description' not in i['ipRanges']['items'][0].keys():
-                description = '-'
+            pprint.pprint(i)
+            if i['ipRanges'].get('items') is None:
+                cidrIp = i['ipv6Ranges']['items'][0]['cidrIpv6']
+                if 'description' not in i['ipv6Ranges']['items'][0].keys():
+                    description = '-'
+                else:
+                    description = i['ipv6Ranges']['items'][0]['description']
             else:
-                description = i['ipRanges']['items'][0]['description']
+                cidrIp = i['ipRanges']['items'][0]['cidrIp']
+                if 'description' not in i['ipRanges']['items'][0].keys():
+                    description = '-'
+                else:
+                    description = i['ipRanges']['items'][0]['description']
             temp_fields = [{
                 "title":cidrIp,
                 "value": "Description:" + description + '\n Port :' + Port,
