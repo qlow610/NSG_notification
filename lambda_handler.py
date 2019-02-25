@@ -45,7 +45,7 @@ def lambda_handler(event, context):
             },
             {
             'title': 'IAM',
-            'value': 'EventAction :' + Action + 'Name :' + userName,
+            'value': 'EventAction :' + Action +'\n' + 'Name :' + userName,
             'short': True
             }
             ]
@@ -62,6 +62,7 @@ def lambda_handler(event, context):
                 }
                 ]
                 }
+            slacknotification(message_json)
         else:
             temp_message = []
             Action = log2['eventName']
@@ -82,10 +83,10 @@ def lambda_handler(event, context):
                         description = i['ipv6Ranges']['items'][0]['description']
                 else:
                     cidrIp = i['ipRanges']['items'][0]['cidrIp']
-                if 'description' not in i['ipRanges']['items'][0].keys():
+                    if 'description' not in i['ipRanges']['items'][0].keys():
                         description = '-'
-                else:
-                    description = i['ipRanges']['items'][0]['description']
+                    else:
+                        description = i['ipRanges']['items'][0]['description']
                 temp_fields = [
                         {
                         "title":cidrIp,
@@ -94,7 +95,6 @@ def lambda_handler(event, context):
                         }
                         ]
                 temp_fields.extend(temp_fields)
-                pprint.pprint(temp_message)
                 Tergetid = log2['requestParameters']['groupId']
                 Describe_SG = ec2.describe_security_groups(GroupIds=[Tergetid])
                 Tags = Describe_SG['SecurityGroups'][0]['Tags']
@@ -128,6 +128,9 @@ def lambda_handler(event, context):
                         }
                         ]
                         }
+                    slacknotification(message_json)
+
+def slacknotification(message_json):
         req = Request(slackurl, json.dumps(message_json).encode('utf-8'))
         try:
             response = urlopen(req)
