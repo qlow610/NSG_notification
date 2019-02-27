@@ -35,7 +35,7 @@ def lambda_handler(event, context):
         Eventsource = log2['eventSource']
         user =  log2['userIdentity']['userName']
         if 'iam.amazonaws.com' in Eventsource:
-            IamNotifi(log2,user,eventTime,Action,user,message_json)
+            IamNotifi(log2,user,eventTime,Action,message_json)
         elif 'ec2.amazonaws.com' in Eventsource:
             NSGnotifi(log2,eventTime,Action,user,message_json)
         else :
