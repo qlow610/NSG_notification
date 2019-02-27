@@ -15,7 +15,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 ec2 = boto3.client('ec2')
 
-#slackurl = os.environ['slackurl']
+slackurl = os.environ['slackurl']
 
 def lambda_handler(event, context):
     message_json = []
@@ -36,9 +36,15 @@ def lambda_handler(event, context):
         user =  log2['userIdentity']['userName']
         if 'iam.amazonaws.com' in Eventsource:
             IamNotifi(log2,user,eventTime,Action,user,message_json)
-        else:
+        elif 'ec2.amazonaws.com' in Eventsource:
             NSGnotifi(log2,eventTime,Action,user,message_json)
-
+        else :
+            logger.info("Unknown: " + str(log2))
+            message_json = {
+                'username': 'AWS Cloud Trail Infomation',
+                'icon_emoji': ':awsicon:',
+                'text': '定義されていないMSGを検知しました'}
+            slacknotification(message_json)
 
 def slacknotification(message_json):
         req = Request(slackurl, json.dumps(message_json).encode('utf-8'))
