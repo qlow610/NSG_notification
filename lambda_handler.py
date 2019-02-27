@@ -57,7 +57,7 @@ def slacknotification(message_json):
         except URLError as e:
             logger.error("Server connection failed: %s", e.reason)
 
-def IamNotifi(log2,user,eventTime,Action,userName,message_json):
+def IamNotifi(log2,user,eventTime,Action,message_json):
     userName = log2['requestParameters']['userName']
     temp_message = [
     {
