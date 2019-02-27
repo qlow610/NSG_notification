@@ -108,7 +108,7 @@ def lambda_handler(event, context):
                         'value': 'Username :' + user + '\n EventTime : ' + eventTime,
                         'short': True
                         },
-                        {
+                        {   
                         'title': 'SG',
                         'value': 'Name :' + name_tag + '\n' + 'SGID :' + Tergetid,
                         'short': True
