@@ -58,7 +58,13 @@ def slacknotification(message_json):
             logger.error("Server connection failed: %s", e.reason)
 
 def IamNotifi(log2,user,eventTime,Action,message_json):
-    userName = log2['requestParameters']['userName']
+    if 'userName' in log2['requestParameters'].keys():
+        userName = log2['requestParameters']['userName']
+        
+    elif 'roleName' in log2['requestParameters'].keys():
+        userName = log2['requestParameters']['roleName']
+    else:
+        userName = log2['requestParameters']['instanceProfileName']
     temp_message = [
     {
         'title': 'Information',
