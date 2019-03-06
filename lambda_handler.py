@@ -63,6 +63,8 @@ def IamNotifi(log2,user,eventTime,Action,message_json):
         
     elif 'roleName' in log2['requestParameters'].keys():
         userName = log2['requestParameters']['roleName']
+    elif 'groupName' in log2['requestParameters'].keys():
+        userName = log2['requestParameters']['groupName']
     else:
         userName = log2['requestParameters']['instanceProfileName']
     temp_message = [
