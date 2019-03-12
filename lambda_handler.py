@@ -59,14 +59,16 @@ def slacknotification(message_json):
 
 def IamNotifi(log2,user,eventTime,Action,message_json):
     if 'userName' in log2['requestParameters'].keys():
-        userName = log2['requestParameters']['userName']
+        Name = log2['requestParameters']['userName']
         
     elif 'roleName' in log2['requestParameters'].keys():
-        userName = log2['requestParameters']['roleName']
+        Name = log2['requestParameters']['roleName']
     elif 'groupName' in log2['requestParameters'].keys():
-        userName = log2['requestParameters']['groupName']
+        Name = log2['requestParameters']['groupName']
+    elif 'instanceProfileName' in log2['requestParameters'].keys():
+        Name = log2['requestParameters']['instanceProfileName']
     else:
-        userName = log2['requestParameters']['instanceProfileName']
+        Name = "-"
     temp_message = [
     {
         'title': 'Information',
@@ -75,7 +77,7 @@ def IamNotifi(log2,user,eventTime,Action,message_json):
     },
     {
     'title': 'IAM',
-    'value': 'EventAction :' + Action +'\n' + 'Name :' + userName,
+    'value': 'EventAction :' + Action +'\n' + 'Name :' + Name,
     'short': True
     }
     ]
@@ -94,7 +96,7 @@ def IamNotifi(log2,user,eventTime,Action,message_json):
         }
     logger.info("Message: " + str(message_json))
     slacknotification(message_json)
-
+    
 def NSGnotifi(log2,eventTime,Action,user,message_json):
     temp_message = []
     Action = log2['eventName']
